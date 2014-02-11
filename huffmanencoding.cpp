@@ -43,15 +43,42 @@ void Letter::setNum(int n){
 }
 
 
+//main methods------------------------------------------------------------------------
+// returns number of unique characters
+int getUniqueCount(int *alpha, int sp){
+	int count = 0;
+	for(int i = 0; i <26; i++){
+		if(alpha[i] != 0){
 
+			count +=1;
+		}
+	}
+	if(sp!=0){
+		count += 1;
+	}
 
+	return count;
 
-int main(int argc, const char* argv[]){
+}
 
-int alpha[26] = {0};
-int sp = 0;
+// turns alpha array into Letter array with only used characters
+void shrinkArray(Letter* unsorted,int *alpha, int sp){
+	int i;
+	int j = 0;
+	for(i = 0; i < 26 ; i++){
+		if(alpha[i] != 0){
+			unsorted[j].setAsc(i+97); //adding non zero values to array
+			unsorted[j].setNum(alpha[i]); // add the count for each character
+			j++;
+		}
+	}
+	unsorted[j].setAsc(32); // add 'space' to last spot in array
+	unsorted[j].setNum(sp); // add count for space
 
-int letter = getchar();
+}
+
+int readIn(int *alpha, int sp){
+	int letter = getchar();
 	while (letter != EOF){	
 		// check if a-z
 		if (letter >= 97 && letter <= 122){		
@@ -64,51 +91,16 @@ int letter = getchar();
 		
 		letter = getchar();
 	}
+	return sp;
+}
 
-//get count of how many different characters including space
-int i;
-int count = 0;
-	for(i = 0; i <26; i++){
-		if(alpha[i] != 0){
-
-			count +=1;
-		}
-	}
-	if(sp!=0){
-		count += 1;
-	}
-	
-//seperate the used characters into a new array
-int j = 0; // increment for unsorted array
-Letter *unsorted; //dynamically allocated Letter array
-	unsorted = new Letter[count];
-	for(i = 0; i < 26 ; i++){
-		if(alpha[i] != 0){
-			unsorted[j].setAsc(i+97); //adding non zero values to array
-			unsorted[j].setNum(alpha[i]); // add the count for each character
-			j++;
-		}
-	}
-	unsorted[j].setAsc(32); // add space to last spot in array
-	unsorted[j].setNum(sp); // add count for space
-
-
-printf("Unsorted:\n");
-for (i = 0 ; i <count-1; i++){
-	printf("%c : %i\n", unsorted[i].getAsc(), unsorted[i].getNum());
-} 
-printf("sp: %i\n\n\n", unsorted[i].getNum());
-
-
-//sorted
-Letter *lowest;
-lowest = new Letter(100, 100);
-Letter *sorted;
-	sorted = new Letter[count];
-int k; //keeps track of where in unsorted the lowest was so we can lazy delete it
-int filled;
+void sortArray(Letter *sorted, Letter *unsorted, int count){
+	Letter *lowest;
+	lowest = new Letter(100, 100);
+	int k; //keeps track of where in unsorted the lowest was so we can lazy delete it
+	int filled;
 for(filled=0; filled < count; filled++){
-	for(i = 0 ; i<count; i++){
+	for(int i = 0 ; i<count; i++){
 		
 		if(unsorted[i].getNum() < lowest->getNum()){ // checks num
 			*lowest = unsorted[i];	
@@ -128,6 +120,51 @@ for(filled=0; filled < count; filled++){
 	lowest->setNum(100);// lazy delete
 	
 }
+}
+
+
+
+
+int main(int argc, const char* argv[]){
+
+int alpha[26] = {0};
+int sp = 0;
+
+sp = readIn(alpha, sp); //counts letters and puts in array. returns the number of spaces
+						//spaces will be added seperately in shrunken Letter array later
+
+printf("letter count:\n");
+for(int o = 0; o < 26; o++){
+	printf("%c : %i\n", o+97, alpha[o]);
+}
+
+
+//get count of how many different characters including space
+	int count = getUniqueCount(alpha, sp);
+
+
+//seperate the used characters into a new array
+	Letter *unsorted; //dynamically allocated Letter array
+		unsorted = new Letter[count];
+		shrinkArray(unsorted,alpha,sp); // unsorted now has only used Letters and spaces
+								// spaces and its count are added to the end of the array
+	
+
+int i;
+printf("Unsorted:\n");
+for (i = 0 ; i <count; i++){
+	if(unsorted[i].getAsc() == 32){
+		printf("sp: %i\n", unsorted[i].getNum());
+	}else{
+	printf("%c : %i\n", unsorted[i].getAsc(), unsorted[i].getNum());
+	}
+} 
+
+
+//sorted
+Letter *sorted;
+	sorted = new Letter[count];
+	sortArray(sorted, unsorted, count);// takes the unsorted array and sorts it into sorted
 	delete[] unsorted; // deallocated array no longer needed
 
 
