@@ -42,7 +42,8 @@ void Letter::setNum(int n){
 	num = n;
 }
 
-	
+
+
 
 
 int main(int argc, const char* argv[]){
@@ -64,12 +65,8 @@ int letter = getchar();
 		letter = getchar();
 	}
 
+//get count of how many different characters including space
 int i;
-	/*for (i=0 ; i< 24 ; i=i+3){
-	printf("%c : %i || %c : %i || %c : %i\n", i+97, alpha[i], i+98, alpha[i+1], i+99, alpha[i+2] );
-	}
-	printf("y : %i || z : %i || space : %i\n",alpha[24],alpha[25], sp);*/
-
 int count = 0;
 	for(i = 0; i <26; i++){
 		if(alpha[i] != 0){
@@ -81,56 +78,58 @@ int count = 0;
 		count += 1;
 	}
 	
-
-int j = 0; // incremented for unsorted array
+//seperate the used characters into a new array
+int j = 0; // increment for unsorted array
 Letter *unsorted; //dynamically allocated Letter array
 	unsorted = new Letter[count];
 	for(i = 0; i < 26 ; i++){
 		if(alpha[i] != 0){
 			unsorted[j].setAsc(i+97); //adding non zero values to array
-			unsorted[j].setNum(alpha[i]);
+			unsorted[j].setNum(alpha[i]); // add the count for each character
 			j++;
 		}
 	}
-	unsorted[j].setAsc(32);
-	unsorted[j].setNum(sp);
+	unsorted[j].setAsc(32); // add space to last spot in array
+	unsorted[j].setNum(sp); // add count for space
 
-	printf("Unsorted:\n");
+
+printf("Unsorted:\n");
 for (i = 0 ; i <count-1; i++){
 	printf("%c : %i\n", unsorted[i].getAsc(), unsorted[i].getNum());
 } 
-	printf("sp: %i\n\n\n", unsorted[i].getNum());
+printf("sp: %i\n\n\n", unsorted[i].getNum());
 
 
-//sort
+//sorted
 Letter *lowest;
 lowest = new Letter(100, 100);
-Letter *blank = new Letter(100,100);
 Letter *sorted;
 	sorted = new Letter[count];
-int k;
+int k; //keeps track of where in unsorted the lowest was so we can lazy delete it
 int filled;
 for(filled=0; filled < count; filled++){
 	for(i = 0 ; i<count; i++){
 		
-		if(unsorted[i].getNum() < lowest->getNum()){
+		if(unsorted[i].getNum() < lowest->getNum()){ // checks num
 			*lowest = unsorted[i];	
 			k=i;
-		}else if(unsorted[i].getNum() == lowest->getNum()){
+		}else if(unsorted[i].getNum() == lowest->getNum()){ // if num are equal
 			
-			if(unsorted[i].getAsc() < lowest->getAsc()){
+			if(unsorted[i].getAsc() < lowest->getAsc()){// check ascii
 				*lowest = unsorted[i];
 				k=i;
 			}
 		}
 	}
 
-	sorted[filled].setNum(lowest->getNum());
+	sorted[filled].setNum(lowest->getNum()); // fill in the sorted array
 	sorted[filled].setAsc(lowest->getAsc());
-	unsorted[k].setNum(100);
-	lowest->setNum(100);
+	unsorted[k].setNum(100); // lazy delete
+	lowest->setNum(100);// lazy delete
 	
 }
+	delete[] unsorted; // deallocated array no longer needed
+
 
 
 	printf("Sorted:\n");
