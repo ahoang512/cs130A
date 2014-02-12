@@ -117,10 +117,31 @@ for(filled=0; filled < count; filled++){
 	sorted[filled].setNum(lowest->getNum()); // fill in the sorted array
 	sorted[filled].setAsc(lowest->getAsc());
 	unsorted[k].setNum(100); // lazy delete
-	lowest->setNum(100);// lazy delete
+       	lowest->setNum(100);// lazy delete
 	
 }
 }
+
+// delete
+Letter *delete(Letter *array, int count){
+  Letter *tmp = array[0];
+  for(int i=count-1; i>-1; i--){//search array from end
+    if (array[i].getNum() != -1){ //check end of array for num = -1
+      break;
+    }
+  }
+    
+  array[0] = array[i];
+  array[i].setNum(-1);
+  
+  //perculate
+  if( i == 0){
+    return *tmp;
+  }
+
+}
+
+
 
 
 
@@ -147,7 +168,7 @@ for(int o = 0; o < 26; o++){
 	Letter *unsorted; //dynamically allocated Letter array
 		unsorted = new Letter[count];
 		shrinkArray(unsorted,alpha,sp); // unsorted now has only used Letters and spaces
-								// spaces and its count are added to the end of the array
+					    	// spaces and its count are added to the end of the array
 	
 
 int i;
