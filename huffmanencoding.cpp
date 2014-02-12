@@ -137,6 +137,12 @@ Letter *delete(Letter *array, int count){
   //perculate
   if( i == 0){
     return *tmp;
+  }else{
+  	if(array[1].getNum() != -1 && array[2].getNum() != -1){
+  		if(array[1].getNum() > array[2].getNum()){
+  			
+  		}
+  	}
   }
 
 }
