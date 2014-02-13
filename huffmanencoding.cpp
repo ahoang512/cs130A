@@ -180,7 +180,7 @@ for(filled=0; filled < count; filled++){
 
 // delete
 Letter* delete(Letter *array, int count){
-  Letter *tmp;
+  Letter tmp;
   if(array[0].getNum() == -1){ // check for empty array
     return NULL;
   }
@@ -203,20 +203,33 @@ while((2*index+2) < count || (2*index+1)<count ){
   if(array[2*index+2].getNum() == -1 && array[2*index+1].getNum() == -1){
   	//at bottom of heap,
   	return array[0];
-  }
-  
-  if(array[2*index+2].getNum() == -1){ // check for only one child
+  }else if(array[2*index+2].getNum() == -1){ // check for only one child
     if(array[index].getNum() > array[2*index+1].getNum()){ 
       // check if left child is greater then parent
       tmp = array[index];
       array[index]=array[2*index+1];
-      array[2*index+1] = *tmp; 
+      array[2*index+1] = tmp; 
       return array[0];
-    }
+    }else{
+    	if(array[2*index+1].getNum() >= array[2*index+2].getNum()){
+    		if(array[index].getNum() > array[2*index+2].getNum()){
+    			//if parent is greater then right child, switch
+    			tmp = array[index];
+    			array[index]=array[2*index+2];
+    			array[2*index+2]= tmp;
+    			index= 2*index+2;
+    		}
+    	}else{
+    		if(array[index].getNum() > array[2*index+1].getNum()){
+    		// else switch with left
+    		tmp = array[index];
+    		array[index]=array[2*index+1];
+    		array[2*index+1]= tmp;
+    		index=2*index+1;
+    		}
+    	}
+  	}
   }
-
-  if(array[2*index+1].get
-}
 
 }
 
