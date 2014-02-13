@@ -2,11 +2,11 @@
 #include<cstdio>
 
 
+//Letter Class--------------------------------------------
 class Letter{
 	private:
-		int asc;
-		int num;
-
+  int asc;	       
+  int num;
 	public:
 		Letter();
 		Letter(int a, int n);
@@ -14,11 +14,20 @@ class Letter{
 		int getNum();
 		void setAsc(int a);
 		void setNum(int n);
+  Letter *left;
+  Letter *right;
 };
 
 Letter::Letter(){
 		asc =  -1;
 		num = 0;
+		left = NULL;
+		right = NULL;
+}
+
+Letter::Letter(const Letter& l){
+  asc = l.asc;
+  num = l.num;
 }
 
 Letter::Letter(int a, int n){
@@ -41,6 +50,43 @@ void Letter::setAsc(int a){
 void Letter::setNum(int n){
 	num = n;
 }
+
+
+//Heap Class ---------------------------------------------------------------------
+class Heap{
+private:
+  Letter *root;
+public:
+  Heap();
+  insert(Letter *);
+
+
+
+  Heap::Heap(){
+    root = NULL;
+  }
+  
+  Heap::insertArray(Letter *array,int arraySize){
+    letter *tmp = root;
+    int index=0;
+    if (root == NULL){
+      root = array;
+    }
+    else
+      while(index<arraySize){
+	if((2*index +1) <count && (2*index+2 <count)){
+	  array[index]->left = array[2*index+1];
+	  array[index]->right = array[2*index +2];
+	  
+	}
+	
+      }
+
+   
+
+
+
+
 
 
 //main methods------------------------------------------------------------------------
@@ -124,26 +170,35 @@ for(filled=0; filled < count; filled++){
 
 // delete
 Letter *delete(Letter *array, int count){
-  Letter *tmp = array[0];
+  Letter *tmp;
+  if(array[0].getNum() == -1){ // check for empty array
+    return NULL;
+  }
+
   for(int i=count-1; i>-1; i--){//search array from end
     if (array[i].getNum() != -1){ //check end of array for num = -1
       break;
     }
   }
-    
+  // i is the index of the node we want to move to the root.  
   array[0] = array[i];
-  array[i].setNum(-1);
-  
+  array[i].setNum(-1);//
+  int index = 0;
   //perculate
-  if( i == 0){
-    return *tmp;
-  }else{
-  	if(array[1].getNum() != -1 && array[2].getNum() != -1){
-  		if(array[1].getNum() > array[2].getNum()){
-  			
-  		}
-  	}
+  if( i == index){ // no children
+    return array[0];
+  } 
+
+  if(array[2*index+2].getNum() == -1){ // check for only one child
+    if(array[index].getNum() > array[2*index+1].getNum()){ 
+      // check if left child is greater then parent
+      tmp = array[index];
+      array[index]=array[2*index+1];
+      array[2*index+1] = *tmp; 
+    }
   }
+
+  if(array[2*index+
 
 }
 
