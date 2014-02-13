@@ -179,13 +179,14 @@ for(filled=0; filled < count; filled++){
 }
 
 // delete
-Letter* delete(Letter *array, int count){
+Letter deleteMin(Letter *array, int count){
+  Letter deleted = array[0];
   Letter tmp;
   if(array[0].getNum() == -1){ // check for empty array
-    return NULL;
+    return deleted;
   }
-
-  for(int i=count-1; i>-1; i--){//search array from end
+int i;
+  for(i=count-1; i>-1; i--){//search array from end
     if (array[i].getNum() != -1){ //check end of array for num = -1
       break;
     }
@@ -196,28 +197,36 @@ Letter* delete(Letter *array, int count){
   int index = 0;
   //perculate
   if( i == index){ // no children
-    return array[0];
+    return deleted;
   } 
 while((2*index+2) < count || (2*index+1)<count ){
-
+	printf("index: %i\n", index);
   if(array[2*index+2].getNum() == -1 && array[2*index+1].getNum() == -1){
   	//at bottom of heap,
-  	return array[0];
+  	return deleted;
   }else if(array[2*index+2].getNum() == -1){ // check for only one child
     if(array[index].getNum() > array[2*index+1].getNum()){ 
+    	
       // check if left child is greater then parent
       tmp = array[index];
       array[index]=array[2*index+1];
       array[2*index+1] = tmp; 
-      return array[0];
-    }else{
+      return deleted;
+  	}else{
+  		return deleted;
+  	}
+  }else{
     	if(array[2*index+1].getNum() >= array[2*index+2].getNum()){
-    		if(array[index].getNum() > array[2*index+2].getNum()){
+    		//printf("left number is %i\n", array[2*index+1].getNum());
+    		//printf("right number is %i\n", array[2*index+2].getNum());
+       		if(array[index].getNum() > array[2*index+2].getNum()){
     			//if parent is greater then right child, switch
     			tmp = array[index];
     			array[index]=array[2*index+2];
     			array[2*index+2]= tmp;
     			index= 2*index+2;
+    		}else{
+    			break;
     		}
     	}else{
     		if(array[index].getNum() > array[2*index+1].getNum()){
@@ -226,13 +235,15 @@ while((2*index+2) < count || (2*index+1)<count ){
     		array[index]=array[2*index+1];
     		array[2*index+1]= tmp;
     		index=2*index+1;
+    		}else{
+    			break;
     		}
     	}
   	}
   }
-
+  
+  return array[0];
 }
-
 
 
 
@@ -293,6 +304,83 @@ for (i = 0 ; i <count; i++){
 	}
 } 
 
+deleteMin(sorted,count);
+	printf("Deleted 1\n");
+for (i = 0 ; i <count; i++){
+	if(sorted[i].getAsc()==32){
+		printf("sp: %i\n", sorted[i].getNum());
+	}else{
+	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	}
+} 
+
+deleteMin(sorted,count);
+	printf("Deleted 2:\n");
+for (i = 0 ; i <count; i++){
+	if(sorted[i].getAsc()==32){
+		printf("sp: %i\n", sorted[i].getNum());
+	}else{
+	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	}
+} 
+
+deleteMin(sorted,count);
+	printf("Deleted 3:\n");
+for (i = 0 ; i <count; i++){
+	if(sorted[i].getAsc()==32){
+		printf("sp: %i\n", sorted[i].getNum());
+	}else{
+	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	}
+} 
+
+deleteMin(sorted,count);
+	printf("Deleted 4:\n");
+for (i = 0 ; i <count; i++){
+	if(sorted[i].getAsc()==32){
+		printf("sp: %i\n", sorted[i].getNum());
+	}else{
+	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	}
+} 
+
+deleteMin(sorted,count);
+	printf("Deleted 5:\n");
+for (i = 0 ; i <count; i++){
+	if(sorted[i].getAsc()==32){
+		printf("sp: %i\n", sorted[i].getNum());
+	}else{
+	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	}
+} 
+
+deleteMin(sorted,count);
+	printf("Deleted 6:\n");
+for (i = 0 ; i <count; i++){
+	if(sorted[i].getAsc()==32){
+		printf("sp: %i\n", sorted[i].getNum());
+	}else{
+	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	}
+} 
+deleteMin(sorted,count);
+	printf("Deleted 7:\n");
+for (i = 0 ; i <count; i++){
+	if(sorted[i].getAsc()==32){
+		printf("sp: %i\n", sorted[i].getNum());
+	}else{
+	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	}
+} 
+deleteMin(sorted,count);
+	printf("Deleted 8:\n");
+for (i = 0 ; i <count; i++){
+	if(sorted[i].getAsc()==32){
+		printf("sp: %i\n", sorted[i].getNum());
+	}else{
+	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	}
+} 
 
 
 
