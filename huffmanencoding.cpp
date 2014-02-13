@@ -10,6 +10,7 @@ class Letter{
 	public:
 		Letter();
 		Letter(int a, int n);
+		Letter(const Letter& );
 		int getAsc();
 		int getNum();
 		void setAsc(int a);
@@ -58,29 +59,38 @@ private:
   Letter *root;
 public:
   Heap();
-  insert(Letter *);
-
+  void insertArray(Letter *, int);
+};
 
 
   Heap::Heap(){
     root = NULL;
   }
   
-  Heap::insertArray(Letter *array,int arraySize){
-    letter *tmp = root;
+void Heap::insertArray(Letter *array,int arraySize){
+    Letter *tmp = root;
     int index=0;
     if (root == NULL){
       root = array;
     }
     else
       while(index<arraySize){
-	if((2*index +1) <count && (2*index+2 <count)){
-	  array[index]->left = array[2*index+1];
-	  array[index]->right = array[2*index +2];
-	  
+		if((2*index +1) <arraySize && (2*index+2 <arraySize)){
+		  array[index].left = &array[2*index+1];
+		  array[index].right = &array[2*index +2];
+		  index=2*index+1;//go left
+		}
 	}
-	
+	if(2<arraySize){
+		index = 2;
+	}
+	while(index<arraySize){ // fill right side;
+	if((2*index +1) <arraySize && (2*index+2 <arraySize)){
+		array[index].left = &array[2*index+1];
+	  array[index].right = &array[2*index +2];
       }
+  	}
+}
 
    
 
@@ -169,7 +179,7 @@ for(filled=0; filled < count; filled++){
 }
 
 // delete
-Letter *delete(Letter *array, int count){
+Letter* delete(Letter *array, int count){
   Letter *tmp;
   if(array[0].getNum() == -1){ // check for empty array
     return NULL;
@@ -188,19 +198,28 @@ Letter *delete(Letter *array, int count){
   if( i == index){ // no children
     return array[0];
   } 
+while((2*index+2) < count || (2*index+1)<count ){
 
+  if(array[2*index+2].getNum() == -1 && array[2*index+1].getNum() == -1){
+  	//at bottom of heap,
+  	return array[0];
+  }
+  
   if(array[2*index+2].getNum() == -1){ // check for only one child
     if(array[index].getNum() > array[2*index+1].getNum()){ 
       // check if left child is greater then parent
       tmp = array[index];
       array[index]=array[2*index+1];
       array[2*index+1] = *tmp; 
+      return array[0];
     }
   }
 
-  if(array[2*index+
+  if(array[2*index+1].get
+}
 
 }
+
 
 
 
@@ -214,11 +233,12 @@ int sp = 0;
 
 sp = readIn(alpha, sp); //counts letters and puts in array. returns the number of spaces
 						//spaces will be added seperately in shrunken Letter array later
-
+/*
 printf("letter count:\n");
 for(int o = 0; o < 26; o++){
 	printf("%c : %i\n", o+97, alpha[o]);
 }
+*/
 
 
 //get count of how many different characters including space
@@ -233,14 +253,14 @@ for(int o = 0; o < 26; o++){
 	
 
 int i;
-printf("Unsorted:\n");
+/*printf("Unsorted:\n");
 for (i = 0 ; i <count; i++){
 	if(unsorted[i].getAsc() == 32){
 		printf("sp: %i\n", unsorted[i].getNum());
 	}else{
 	printf("%c : %i\n", unsorted[i].getAsc(), unsorted[i].getNum());
 	}
-} 
+} */
 
 
 //sorted
@@ -259,7 +279,10 @@ for (i = 0 ; i <count; i++){
 	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
 	}
 } 
-	
+
+
+
+
 }
 
 
