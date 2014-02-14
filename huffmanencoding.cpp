@@ -175,7 +175,7 @@ int i;
     return deleted;
   } 
 while((2*index+2) < count || (2*index+1)<count ){
-	printf("index: %i\n", index);
+	//printf("index: %i\n", index);
   if(array[2*index+2].getNum() == -1 && array[2*index+1].getNum() == -1){
   	//at bottom of heap,
   	return deleted;
@@ -258,14 +258,15 @@ Letter buildTrie(Letter *array, int count){
 	return deleteMin(array,count);
 }
 
-void codeMap(Letter l){
-	if(!(l.isTrie())){
-		printf(" : %c\n",l.getAsc());
+void codeMap(Letter *l){
+	cout<< "Shit is crazy\n";
+	if(!(l->isTrie())){
+		printf(" : %c\n",l->getAsc());
 	}else{
 		cout<< 0;
-		codeMap(*(l.left));
+		codeMap(l->left);
 		cout<< 1;
-		codeMap(*(l.right));
+		codeMap(l->right);
 	}
 }
 
@@ -310,7 +311,8 @@ for (i = 0 ; i <count; i++){
 } 
 
 Letter trie = buildTrie(sorted,count);
-codeMap(trie);
+Letter *tp = &trie;
+codeMap(tp);
 
 
 
