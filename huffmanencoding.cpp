@@ -1,14 +1,14 @@
 //Anthony Hoang and Charles Chain
 #include<cstdio>
+#include <iostream>
 
+using namespace std;
 
 //Letter Class--------------------------------------------
 class Letter{
 	private:
   		int asc;	       
  		int num;
-  		Letter *left;
-  		Letter *right;
 
 	public:
 		Letter();
@@ -17,6 +17,8 @@ class Letter{
 		Letter(Letter, Letter);
 		int getAsc();
 		int getNum();
+  		Letter *left;
+  		Letter *right;
 		void setAsc(int a);
 		void setNum(int n);
 		bool isTrie();
@@ -244,6 +246,29 @@ void insertTrie(Letter let, Letter *array, int count){
 
 }
 
+Letter buildTrie(Letter *array, int count){
+	int filled = count;
+	while(filled > 1){
+	Letter first = deleteMin(array,count);
+	Letter second = deleteMin(array,count);
+	Letter head = merge(first,second);
+	insertTrie(head,array,count);
+	filled--;
+	}
+	return deleteMin(array,count);
+}
+
+void codeMap(Letter l){
+	if(!(l.isTrie())){
+		printf(" : %c\n",l.getAsc());
+	}else{
+		cout<< 0;
+		codeMap(*(l.left));
+		cout<< 1;
+		codeMap(*(l.right));
+	}
+}
+
 
 
 int main(int argc, const char* argv[]){
@@ -284,21 +309,8 @@ for (i = 0 ; i <count; i++){
 	}
 } 
 
-Letter first = deleteMin(sorted,count);
-Letter second = deleteMin(sorted,count);
-Letter head = merge(first,second);
-insertTrie(head,sorted,count);
-
-	printf("Sorted:\n");
-for (i = 0 ; i <count; i++){
-	if(sorted[i].isTrie()){
-		printf("Trie\n");
-	}else if(sorted[i].getAsc()==32){
-		printf("sp: %i\n", sorted[i].getNum());
-	}else{
-	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
-	}
-} 
+Letter trie = buildTrie(sorted,count);
+codeMap(trie);
 
 
 
