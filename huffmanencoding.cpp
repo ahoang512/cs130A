@@ -5,18 +5,21 @@
 //Letter Class--------------------------------------------
 class Letter{
 	private:
-  int asc;	       
-  int num;
+  		int asc;	       
+ 		int num;
+  		Letter *left;
+  		Letter *right;
+
 	public:
 		Letter();
 		Letter(int a, int n);
 		Letter(const Letter& );
+		Letter(Letter, Letter);
 		int getAsc();
 		int getNum();
 		void setAsc(int a);
 		void setNum(int n);
-  Letter *left;
-  Letter *right;
+		bool isTrie();
 };
 
 Letter::Letter(){
@@ -29,11 +32,21 @@ Letter::Letter(){
 Letter::Letter(const Letter& l){
   asc = l.asc;
   num = l.num;
+  left = l.left;
+  right = l.right;
 }
 
 Letter::Letter(int a, int n){
 	asc = a;
 	num = n;
+	left = NULL;
+	right = NULL;
+}
+Letter::Letter(Letter leftc, Letter rightc){
+	asc = -1;
+	num = leftc.getNum() + rightc.getNum();
+	left = &leftc;
+	right = &rightc;
 }
 
 int Letter::getAsc(){
@@ -52,51 +65,11 @@ void Letter::setNum(int n){
 	num = n;
 }
 
-
-//Heap Class ---------------------------------------------------------------------
-class Heap{
-private:
-  Letter *root;
-public:
-  Heap();
-  void insertArray(Letter *, int);
-};
-
-
-  Heap::Heap(){
-    root = NULL;
-  }
-  
-void Heap::insertArray(Letter *array,int arraySize){
-    Letter *tmp = root;
-    int index=0;
-    if (root == NULL){
-      root = array;
-    }
-    else
-      while(index<arraySize){
-		if((2*index +1) <arraySize && (2*index+2 <arraySize)){
-		  array[index].left = &array[2*index+1];
-		  array[index].right = &array[2*index +2];
-		  index=2*index+1;//go left
-		}
-	}
-	if(2<arraySize){
-		index = 2;
-	}
-	while(index<arraySize){ // fill right side;
-	if((2*index +1) <arraySize && (2*index+2 <arraySize)){
-		array[index].left = &array[2*index+1];
-	  array[index].right = &array[2*index +2];
-      }
-  	}
+bool Letter::isTrie(){
+	if(left == NULL && right == NULL)
+		return false;
+	return true;
 }
-
-   
-
-
-
-
 
 
 //main methods------------------------------------------------------------------------
@@ -245,8 +218,31 @@ while((2*index+2) < count || (2*index+1)<count ){
   return array[0];
 }
 
+Letter merge(Letter first, Letter sec){
+	Letter parent(sec,first);
+	return parent;
+}
 
+void insertTrie(Letter let, Letter *array, int count){
+	Letter tmp;
+	int index;
+  for(index=count-1; index>-1; index--){//search array from end
+    if (array[index].getNum() != -1){ //check end of array for num = -1
+      break;
+    }
+  }
+  index++; 		//index is now at right most leaf
+  array[index] = let;
+  
+  while(array[(index-1)/2].getNum() > array[index].getNum()){
+	tmp = array[(index-1)/2];
+	array[(index-1)/2] = array[index];
+	array[index] = tmp;
+	index = (index-1)/2;
 
+  }
+
+}
 
 
 
@@ -257,12 +253,6 @@ int sp = 0;
 
 sp = readIn(alpha, sp); //counts letters and puts in array. returns the number of spaces
 						//spaces will be added seperately in shrunken Letter array later
-/*
-printf("letter count:\n");
-for(int o = 0; o < 26; o++){
-	printf("%c : %i\n", o+97, alpha[o]);
-}
-*/
 
 
 //get count of how many different characters including space
@@ -277,16 +267,6 @@ for(int o = 0; o < 26; o++){
 	
 
 int i;
-/*printf("Unsorted:\n");
-for (i = 0 ; i <count; i++){
-	if(unsorted[i].getAsc() == 32){
-		printf("sp: %i\n", unsorted[i].getNum());
-	}else{
-	printf("%c : %i\n", unsorted[i].getAsc(), unsorted[i].getNum());
-	}
-} */
-
-
 //sorted
 Letter *sorted;
 	sorted = new Letter[count];
@@ -304,6 +284,26 @@ for (i = 0 ; i <count; i++){
 	}
 } 
 
+Letter first = deleteMin(sorted,count);
+Letter second = deleteMin(sorted,count);
+Letter head = merge(first,second);
+insertTrie(head,sorted,count);
+
+	printf("Sorted:\n");
+for (i = 0 ; i <count; i++){
+	if(sorted[i].isTrie()){
+		printf("Trie\n");
+	}else if(sorted[i].getAsc()==32){
+		printf("sp: %i\n", sorted[i].getNum());
+	}else{
+	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	}
+} 
+
+
+
+
+/*
 deleteMin(sorted,count);
 	printf("Deleted 1\n");
 for (i = 0 ; i <count; i++){
@@ -382,7 +382,15 @@ for (i = 0 ; i <count; i++){
 	}
 } 
 
-
+deleteMin(sorted,count);
+	printf("Deleted 9:\n");
+for (i = 0 ; i <count; i++){
+	if(sorted[i].getAsc()==32){
+		printf("sp: %i\n", sorted[i].getNum());
+	}else{
+	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	}
+}*/
 
 }
 
