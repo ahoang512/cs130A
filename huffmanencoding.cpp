@@ -44,11 +44,11 @@ Letter::Letter(int a, int n){
 	left = NULL;
 	right = NULL;
 }
-Letter::Letter(Letter leftc, Letter rightc){
-	asc = -1;
-	num = leftc.getNum() + rightc.getNum();
-	left = &leftc;
-	right = &rightc;
+Letter::Letter(Letter first, Letter second){
+	asc = -2;
+	num = first.getNum() + second.getNum();
+	left = &second;
+	right = &first;
 }
 
 int Letter::getAsc(){
@@ -75,6 +75,21 @@ bool Letter::isTrie(){
 
 
 //main methods------------------------------------------------------------------------
+void printHeap(Letter *sorted,int  count ){
+	for (int i = 0 ; i <count; i++){
+	if(sorted[i].isTrie()){
+		cout << "Trie ";
+		printf(" count: %i\n",sorted[i].getNum());
+	}
+	else if(sorted[i].getAsc()==32){
+		printf("sp: %i\n", sorted[i].getNum());
+	}else{
+	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	}
+}
+printf("\n\n"); 
+}
+
 // returns number of unique characters
 int getUniqueCount(int *alpha, int sp){
 	int count = 0;
@@ -148,7 +163,7 @@ for(filled=0; filled < count; filled++){
 	sorted[filled].setNum(lowest->getNum()); // fill in the sorted array
 	sorted[filled].setAsc(lowest->getAsc());
 	unsorted[k].setNum(100); // lazy delete
-       	lowest->setNum(100);// lazy delete
+    lowest->setNum(100);// lazy delete
 	
 }
 }
@@ -168,7 +183,9 @@ int i;
   }
   // i is the index of the node we want to move to the root.  
   array[0] = array[i];
-  array[i].setNum(-1);//
+  array[i].setNum(-1);
+  array[i].left = NULL;
+  array[i].right = NULL;
   int index = 0;
   //perculate
   if( i == index){ // no children
@@ -217,14 +234,16 @@ while((2*index+2) < count || (2*index+1)<count ){
   	}
   }
   
-  return array[0];
+  return deleted;
 }
-
+/* Doesnt work
 Letter merge(Letter first, Letter sec){
-	Letter parent(sec,first);
+	Letter parent(first,sec);
 	return parent;
 }
+*/
 
+//inserts Trie back into minHeap
 void insertTrie(Letter let, Letter *array, int count){
 	Letter tmp;
 	int index;
@@ -251,22 +270,24 @@ Letter buildTrie(Letter *array, int count){
 	while(filled > 1){
 	Letter first = deleteMin(array,count);
 	Letter second = deleteMin(array,count);
-	Letter head = merge(first,second);
+	Letter head(first,second);
 	insertTrie(head,array,count);
+	printHeap(array,count);
 	filled--;
 	}
-	return deleteMin(array,count);
+	Letter root = deleteMin(array,count);
+	return root;
 }
 
 void codeMap(Letter *l){
 	cout<< "Shit is crazy\n";
-	if(!(l->isTrie())){
-		printf(" : %c\n",l->getAsc());
-	}else{
-		cout<< 0;
+	if((l->isTrie())){
+		cout<<0;
 		codeMap(l->left);
-		cout<< 1;
+		cout<<1;
 		codeMap(l->right);
+	}else{
+		printf(" : %c\n", l->getAsc());
 	}
 }
 
@@ -309,7 +330,7 @@ for (i = 0 ; i <count; i++){
 	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
 	}
 } 
-
+cout<<"\n \n \n";
 Letter trie = buildTrie(sorted,count);
 Letter *tp = &trie;
 codeMap(tp);
@@ -318,10 +339,50 @@ codeMap(tp);
 
 
 /*
+cout << "Merge Test\n" ;
+Letter first = deleteMin(sorted,count);
+printf("first delete : %c\n", first.getAsc());
+Letter second = deleteMin(sorted,count);
+printf("second delete : %c\n", second.getAsc());
+Letter parent(second,first);  
+printf("right: %c\n", parent.right->getAsc());
+printf("left : %c\n", parent.left->getAsc());
+
+
+cout << "\nInsert Test\n";
+insertTrie(parent,sorted,count);
+
+printf("min Heap after inserted first trie\n");
+printHeap(sorted, count);
+
+Letter third = deleteMin(sorted,count);
+printf("third delete : %c\n", third.getAsc());
+Letter fourth = deleteMin(sorted,count);
+printf("fourth delete : %c\n", fourth.getAsc());
+Letter parent1(third,fourth);  
+printf("right: %c\n", parent1.right->getAsc());
+printf("left : %c\n", parent1.left->getAsc());
+
+cout << "\nInsert Test 2\n";
+insertTrie(parent1,sorted,count);
+
+
+
+printf("min Heap after inserted second trie\n");
+printHeap(sorted,count);
+*/
+
+
+
+/*
+
 deleteMin(sorted,count);
 	printf("Deleted 1\n");
 for (i = 0 ; i <count; i++){
-	if(sorted[i].getAsc()==32){
+	if(sorted[i].isTrie()){
+		cout << "Trie\n";
+	}
+	else if(sorted[i].getAsc()==32){
 		printf("sp: %i\n", sorted[i].getNum());
 	}else{
 	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
@@ -404,7 +465,8 @@ for (i = 0 ; i <count; i++){
 	}else{
 	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
 	}
-}*/
+}
+*/
 
 }
 
