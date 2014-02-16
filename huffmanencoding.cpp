@@ -333,8 +333,23 @@ for (i = 0 ; i <count; i++){
 cout<<"\n \n \n";
 Letter trie = buildTrie(sorted,count);
 Letter *tp = &trie;
-codeMap(tp);
+//codeMap(tp);
 
+printf("parent count : %i\n",trie.getNum());
+printf("parent.left, count : %i asc value : %i\n",trie.left->getNum(), trie.left->getAsc());
+printf("parent.right, count: %i asc value : %i\n",trie.right->getNum(),trie.right->getAsc());
+printf("parent.left->left, count : %i letter: %c\n",trie.left->left->getNum(), trie.left->left->getAsc());
+printf("parent.left->right, count : %i letter: %c \n",trie.left->right->getNum(), trie.left->right->getAsc());
+printf("parent.right->left, count: %i letter: %c\n",trie.right->left->getNum(),trie.right->left->getAsc());
+printf("parent.right->right, count: %i letter: sp\n",trie.right->right->getNum());
+printf("parent.left->left->left, count: %i letter: %c\n",trie.left->left->left->getNum(),trie.left->left->left->getAsc());
+printf("parent.left->left->right, count: %i letter: %c\n",trie.left->left->right->getNum(),trie.left->left->right->getAsc());
+printf("parent.left->right->left, count: %i letter: %c\n",trie.left->right->left->getNum(),trie.left->right->left->getAsc());
+printf("parent.left->right->right, count: %i letter: %c\n",trie.left->right->right->getNum(),trie.left->right->right->getAsc());
+printf("parent.right->left->left, count: %i letter: %c\n",trie.right->left->left->getNum(),trie.right->left->left->getAsc());
+printf("parent.right->left->right, count: %i letter: %c\n",trie.right->left->right->getNum(),trie.right->left->right->getAsc());
+printf("parent.right->left->left->left, count: %i letter: %c\n",trie.right->left->left->left->getNum(),trie.right->left->left->left->getAsc());
+printf("parent.right->left->left->right, count: %i letter: %c\n",trie.right->left->left->right->getNum(),trie.right->left->left->right->getAsc());
 
 
 
