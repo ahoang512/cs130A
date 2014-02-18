@@ -1,6 +1,7 @@
 //Anthony Hoang and Charles Chain
 #include<cstdio>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -14,11 +15,11 @@ class Letter{
 		Letter();
 		Letter(int a, int n);
 		Letter(const Letter& );
-		Letter(Letter, Letter);
 		int getAsc();
 		int getNum();
   		Letter *left;
   		Letter *right;
+		std::string path;
 		void setAsc(int a);
 		void setNum(int n);
 		bool isTrie();
@@ -29,6 +30,7 @@ Letter::Letter(){
 		num = 0;
 		left = NULL;
 		right = NULL;
+		path = "";
 }
 
 Letter::Letter(const Letter& l){
@@ -36,6 +38,7 @@ Letter::Letter(const Letter& l){
   num = l.num;
   left = l.left;
   right = l.right;
+  path = l.path;
 }
 
 Letter::Letter(int a, int n){
@@ -43,12 +46,7 @@ Letter::Letter(int a, int n){
 	num = n;
 	left = NULL;
 	right = NULL;
-}
-Letter::Letter(Letter first, Letter second){
-	asc = -2;
-	num = first.getNum() + second.getNum();
-	left = &second;
-	right = &first;
+	path = "";
 }
 
 int Letter::getAsc(){
@@ -281,35 +279,79 @@ Letter buildTrie(Letter *array, int count){
 	head[i].setNum(first[i].getNum() + second[i].getNum());
 	head[i].setAsc(-2);
 	insertTrie(head[i],array,count);
-	printHeap(array,count);
+//	printHeap(array,count);
 	filled--;
 	i++;
 	}
 	Letter root = deleteMin(array,count);
+//	delete[] first;
+//	delete[] second;
+//	delete[] head;
+
 	return root;
 }
 
-void codeMap(Letter *l){
-	cout<< "Shit is crazy\n";
-	if((l->isTrie())){
-		cout<<0;
-		codeMap(l->left);
-		cout<<1;
-		codeMap(l->right);
+void codeMap(Letter *l,string c){
+	//cout<< "Shit is crazy\n";
+	string left = c;
+	string right = c;
+	if((l->getAsc()==-2)){
+		left.append("1");
+		codeMap(l->left,left);
+		right.append("0");
+		codeMap(l->right,right);
 	}else{
-		printf(" : %c\n", l->getAsc());
+		l->path = c;
+		printf("%s : %c\n",c.c_str(), l->getAsc());
 	}
+}
+string getCode(Letter *trie, char l){ //gets the path to each letter
+	int i = l;
+	if((trie->getAsc()==-2)){
+		getCode(trie->left,l);
+		getCode(trie->right,l);
+	}else if(trie->getAsc() == i){
+		return trie->path;
+	}
+	cout << "Letter not in Tree\n";
+	return NULL;
+}
+
+void printEncoded(Letter *trie, char *buffer,int count){ //prints I Like Apples in encoded form
+	for(int i=0;i < count;i++){
+		cout << getCode(trie,buffer[i]);
+	}
+	cout << "\n";
+	
 }
 
 
 
 int main(int argc, const char* argv[]){
 
+char buffer[256];
 int alpha[26] = {0};
 int sp = 0;
+int k=0;
 
-sp = readIn(alpha, sp); //counts letters and puts in array. returns the number of spaces
+//sp = readIn(alpha, sp); //counts letters and puts in array. returns the number of spaces
 						//spaces will be added seperately in shrunken Letter array later
+	int letter = getchar();
+	buffer[k] = letter;
+	k++;
+	while (letter != EOF){	
+		// check if a-z
+		if (letter >= 97 && letter <= 122){		
+			alpha[letter-97] += 1;
+		}
+		//check for spaces	
+		if (letter == 32){
+				sp++;
+		}
+		letter = getchar();
+		buffer[k] = letter;
+		k++;
+	}
 
 
 //get count of how many different characters including space
@@ -338,14 +380,18 @@ for (i = 0 ; i <count; i++){
 		printf("sp: %i\n", sorted[i].getNum());
 	}else{
 	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
+	
 	}
 } 
 cout<<"\n \n \n";
 Letter trie = buildTrie(sorted,count);
 Letter *tp = &trie;
-//codeMap(tp);
+std::string c = "";
+codeMap(tp,c);
+printEncoded(tp,buffer,k);
 
-printf("parent count : %i\n",trie.getNum());
+
+/*printf("parent count : %i\n",trie.getNum());
 printf("parent.left, count : %i asc value : %c\n",trie.left->getNum(), trie.left->getAsc());
 printf("parent.right, count: %i asc value : %c\n",trie.right->getNum(),trie.right->getAsc());
 printf("parent.left->left, count : %i letter: %c\n",trie.left->left->getNum(), trie.left->left->getAsc());
@@ -360,6 +406,7 @@ printf("parent.right->left->left, count: %i letter: %c\n",trie.right->left->left
 printf("parent.right->left->right, count: %i letter: %c\n",trie.right->left->right->getNum(),trie.right->left->right->getAsc());
 printf("parent.right->left->left->left, count: %i letter: %c\n",trie.right->left->left->left->getNum(),trie.right->left->left->left->getAsc());
 printf("parent.right->left->left->right, count: %i letter: %c\n",trie.right->left->left->right->getNum(),trie.right->left->left->right->getAsc());
+*/
 
 
 
