@@ -315,6 +315,27 @@ void printEncoded(Letter *trie, int *buffer,int count){ //prints I Like Apples i
 	
 }
 
+void decode(Letter *trie, int *buffer,int length){
+	Letter *travel = trie;
+	int i=0;
+	while(i < length){
+		while(travel->getAsc() == -2){
+			if(buffer[i] == 49){
+				travel = travel->left;
+				i++;
+			}
+			else if(buffer[i] == 48){
+				travel = travel->right;
+				i++;
+			}
+		}
+		printf("%c",travel->getAsc());
+		
+		travel = trie;
+	}
+	cout << "\n";
+}
+
 
 
 int main(int argc, const char* argv[]){
@@ -432,6 +453,8 @@ std::string c = "";
 codeMap(tp,c);
 printf("\n");
 printEncoded(tp,buffer0,k);
+decode(tp,buffer1,k1);
+decode(tp,buffer2,k2);
 
 
 /*printf("parent count : %i\n",trie.getNum());
