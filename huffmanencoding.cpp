@@ -319,6 +319,7 @@ void decode(Letter *trie, int *buffer,int length){
 	Letter *travel = trie;
 	int i=0;
 	while(i < length){
+		
 		while(travel->getAsc() == -2){
 			if(buffer[i] == 49){
 				travel = travel->left;
@@ -332,8 +333,14 @@ void decode(Letter *trie, int *buffer,int length){
 		printf("%c",travel->getAsc());
 		
 		travel = trie;
+		if(buffer[i] == 10){ //skips past the new line
+			i++;
+			cout << "\n";
+		}
+		if(buffer[i] != 49 && buffer[i] != 48)
+			break;
 	}
-	cout << "\n";
+
 }
 
 
@@ -343,7 +350,7 @@ bool firstLine = true;
 bool secLine = false;
 bool thirdLine = false;
 int buffer0[256];
-int buffer1[256];
+int buffer1[512];
 int buffer2[256];
 int alpha[26] = {0};
 int sp = 0;
@@ -384,17 +391,17 @@ int k2=0;
 		
 
 		if(secLine){
-			if(letter == 10){ // check for new line
+			/*if(letter == 10){ // check for new line
 				thirdLine=true;
 				secLine = false;
 				
-			}				
+			}*/
 			
-			if(letter != 10){		
+			//if(letter != 10){		
 				buffer1[k1]=letter;
 				k1++;
 				printf("buffer1 : %c\n", letter);
-			}
+			//}
 			
 
 		}
