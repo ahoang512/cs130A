@@ -234,12 +234,6 @@ while((2*index+2) < count || (2*index+1)<count ){
   
   return deleted;
 }
-/* Doesnt work
-Letter merge(Letter first, Letter sec){
-	Letter parent(first,sec);
-	return parent;
-}
-*/
 
 //inserts Trie back into minHeap
 void insertTrie(Letter let, Letter *array, int count){
@@ -279,15 +273,11 @@ Letter buildTrie(Letter *array, int count){
 	head[i].setNum(first[i].getNum() + second[i].getNum());
 	head[i].setAsc(-2);
 	insertTrie(head[i],array,count);
-//	printHeap(array,count);
+
 	filled--;
 	i++;
 	}
 	Letter root = deleteMin(array,count);
-//	delete[] first;
-//	delete[] second;
-//	delete[] head;
-
 	return root;
 }
 
@@ -305,23 +295,23 @@ void codeMap(Letter *l,string c){
 		printf("%s : %c\n",c.c_str(), l->getAsc());
 	}
 }
-string getCode(Letter *trie, char l){ //gets the path to each letter
-	int i = l;
+void getCode(Letter *trie, int l, string *s){ //gets the path to each letter
 	if((trie->getAsc()==-2)){
-		getCode(trie->left,l);
-		getCode(trie->right,l);
-	}else if(trie->getAsc() == i){
-		return trie->path;
+		getCode(trie->left,l,s);
+		getCode(trie->right,l,s);
+	}else if(trie->getAsc() == l){
+		s->append(trie->path);
+		return;
 	}
-	cout << "Letter not in Tree\n";
-	return NULL;
+	return;
 }
 
-void printEncoded(Letter *trie, char *buffer,int count){ //prints I Like Apples in encoded form
+void printEncoded(Letter *trie, int *buffer,int count){ //prints I Like Apples in encoded form
+	string *code = new string();
 	for(int i=0;i < count;i++){
-		cout << getCode(trie,buffer[i]);
+		getCode(trie,buffer[i], code);
 	}
-	cout << "\n";
+	cout << *code + "\n";
 	
 }
 
@@ -329,7 +319,7 @@ void printEncoded(Letter *trie, char *buffer,int count){ //prints I Like Apples 
 
 int main(int argc, const char* argv[]){
 
-char buffer[256];
+int buffer[256];
 int alpha[26] = {0};
 int sp = 0;
 int k=0;
@@ -350,6 +340,7 @@ int k=0;
 		}
 		letter = getchar();
 		buffer[k] = letter;
+		printf("buffer %i : %c\n", k, buffer[k]);
 		k++;
 	}
 
@@ -388,6 +379,7 @@ Letter trie = buildTrie(sorted,count);
 Letter *tp = &trie;
 std::string c = "";
 codeMap(tp,c);
+printf("\n");
 printEncoded(tp,buffer,k);
 
 
@@ -446,99 +438,6 @@ printHeap(sorted,count);
 
 
 
-/*
-
-deleteMin(sorted,count);
-	printf("Deleted 1\n");
-for (i = 0 ; i <count; i++){
-	if(sorted[i].isTrie()){
-		cout << "Trie\n";
-	}
-	else if(sorted[i].getAsc()==32){
-		printf("sp: %i\n", sorted[i].getNum());
-	}else{
-	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
-	}
-} 
-
-deleteMin(sorted,count);
-	printf("Deleted 2:\n");
-for (i = 0 ; i <count; i++){
-	if(sorted[i].getAsc()==32){
-		printf("sp: %i\n", sorted[i].getNum());
-	}else{
-	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
-	}
-} 
-
-deleteMin(sorted,count);
-	printf("Deleted 3:\n");
-for (i = 0 ; i <count; i++){
-	if(sorted[i].getAsc()==32){
-		printf("sp: %i\n", sorted[i].getNum());
-	}else{
-	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
-	}
-} 
-
-deleteMin(sorted,count);
-	printf("Deleted 4:\n");
-for (i = 0 ; i <count; i++){
-	if(sorted[i].getAsc()==32){
-		printf("sp: %i\n", sorted[i].getNum());
-	}else{
-	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
-	}
-} 
-
-deleteMin(sorted,count);
-	printf("Deleted 5:\n");
-for (i = 0 ; i <count; i++){
-	if(sorted[i].getAsc()==32){
-		printf("sp: %i\n", sorted[i].getNum());
-	}else{
-	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
-	}
-} 
-
-deleteMin(sorted,count);
-	printf("Deleted 6:\n");
-for (i = 0 ; i <count; i++){
-	if(sorted[i].getAsc()==32){
-		printf("sp: %i\n", sorted[i].getNum());
-	}else{
-	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
-	}
-} 
-deleteMin(sorted,count);
-	printf("Deleted 7:\n");
-for (i = 0 ; i <count; i++){
-	if(sorted[i].getAsc()==32){
-		printf("sp: %i\n", sorted[i].getNum());
-	}else{
-	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
-	}
-} 
-deleteMin(sorted,count);
-	printf("Deleted 8:\n");
-for (i = 0 ; i <count; i++){
-	if(sorted[i].getAsc()==32){
-		printf("sp: %i\n", sorted[i].getNum());
-	}else{
-	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
-	}
-} 
-
-deleteMin(sorted,count);
-	printf("Deleted 9:\n");
-for (i = 0 ; i <count; i++){
-	if(sorted[i].getAsc()==32){
-		printf("sp: %i\n", sorted[i].getNum());
-	}else{
-	printf("%c : %i\n", sorted[i].getAsc(), sorted[i].getNum());
-	}
-}
-*/
 
 }
 
