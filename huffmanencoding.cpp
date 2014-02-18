@@ -267,13 +267,23 @@ void insertTrie(Letter let, Letter *array, int count){
 
 Letter buildTrie(Letter *array, int count){
 	int filled = count;
+	Letter *first, *second, *head;
+	first = new Letter[count-1];
+	second = new Letter[count-1];
+	head = new Letter[count-1];
+	
+	int i = 0;
 	while(filled > 1){
-	Letter first = deleteMin(array,count);
-	Letter second = deleteMin(array,count);
-	Letter head(first,second);
-	insertTrie(head,array,count);
+	first[i] = deleteMin(array,count);
+	second[i] = deleteMin(array,count);
+	head[i].right = &first[i];
+	head[i].left = &second[i];
+	head[i].setNum(first[i].getNum() + second[i].getNum());
+	head[i].setAsc(-2);
+	insertTrie(head[i],array,count);
 	printHeap(array,count);
 	filled--;
+	i++;
 	}
 	Letter root = deleteMin(array,count);
 	return root;
@@ -336,12 +346,12 @@ Letter *tp = &trie;
 //codeMap(tp);
 
 printf("parent count : %i\n",trie.getNum());
-printf("parent.left, count : %i asc value : %i\n",trie.left->getNum(), trie.left->getAsc());
-printf("parent.right, count: %i asc value : %i\n",trie.right->getNum(),trie.right->getAsc());
+printf("parent.left, count : %i asc value : %c\n",trie.left->getNum(), trie.left->getAsc());
+printf("parent.right, count: %i asc value : %c\n",trie.right->getNum(),trie.right->getAsc());
 printf("parent.left->left, count : %i letter: %c\n",trie.left->left->getNum(), trie.left->left->getAsc());
-printf("parent.left->right, count : %i letter: %c \n",trie.left->right->getNum(), trie.left->right->getAsc());
+printf("parent.left->right, count : %i letter: %c\n",trie.left->right->getNum(), trie.left->right->getAsc());
 printf("parent.right->left, count: %i letter: %c\n",trie.right->left->getNum(),trie.right->left->getAsc());
-printf("parent.right->right, count: %i letter: sp\n",trie.right->right->getNum());
+printf("parent.right->right, count: %i letter: %c\n",trie.right->right->getNum(),trie.right->right->getAsc());
 printf("parent.left->left->left, count: %i letter: %c\n",trie.left->left->left->getNum(),trie.left->left->left->getAsc());
 printf("parent.left->left->right, count: %i letter: %c\n",trie.left->left->right->getNum(),trie.left->left->right->getAsc());
 printf("parent.left->right->left, count: %i letter: %c\n",trie.left->right->left->getNum(),trie.left->right->left->getAsc());
