@@ -318,17 +318,24 @@ void printEncoded(Letter *trie, int *buffer,int count){ //prints I Like Apples i
 
 
 int main(int argc, const char* argv[]){
-
-int buffer[256];
+bool firstLine = true;
+bool secLine = false;
+bool thirdLine = false;
+int buffer0[256];
+int buffer1[256];
+int buffer2[256];
 int alpha[26] = {0};
 int sp = 0;
 int k=0;
+int k1=0;
+int k2=0;
 
 //sp = readIn(alpha, sp); //counts letters and puts in array. returns the number of spaces
 						//spaces will be added seperately in shrunken Letter array later
 	int letter = getchar();
-	buffer[k] = letter;
+	buffer0[k] = letter;
 	k++;
+	printf("buffer0 : %c\n", letter);
 	while (letter != EOF){	
 		// check if a-z
 		if (letter >= 97 && letter <= 122){		
@@ -339,9 +346,53 @@ int k=0;
 				sp++;
 		}
 		letter = getchar();
-		buffer[k] = letter;
-		printf("buffer %i : %c\n", k, buffer[k]);
-		k++;
+		
+
+		if(thirdLine){
+			if(letter == 10){
+				break;
+			}			
+
+			if(letter != 10){
+				buffer2[k2]=letter;
+				k2++;
+				printf("buffer2 : %c\n", letter);
+			}
+			
+		}
+		
+
+		if(secLine){
+			if(letter == 10){ // check for new line
+				thirdLine=true;
+				secLine = false;
+				
+			}				
+			
+			if(letter != 10){		
+				buffer1[k1]=letter;
+				k1++;
+				printf("buffer1 : %c\n", letter);
+			}
+			
+
+		}
+
+
+		if(firstLine){
+			if(letter == 10){
+				firstLine = false;
+				secLine = true;
+				
+			}
+			if(letter != 10){
+				buffer0[k] = letter;
+				k++;
+				printf("buffer0 : %c\n", letter);
+			}
+
+			
+		}	
 	}
 
 
@@ -380,7 +431,7 @@ Letter *tp = &trie;
 std::string c = "";
 codeMap(tp,c);
 printf("\n");
-printEncoded(tp,buffer,k);
+printEncoded(tp,buffer0,k);
 
 
 /*printf("parent count : %i\n",trie.getNum());
