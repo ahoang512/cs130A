@@ -1,3 +1,3 @@
 all:	
-	g++ huffmanencoding.cpp -o prog1
+	g++ huffmanencoding.cpp -o prog2
 
