@@ -13,7 +13,7 @@ class Trie{
 
 	//-----Methods-----//	
 		void codeMap(Letter *, string *);  //head is private variable so can only pass in head within Trie
-		void getCode(Letter *, int, string); 
+		void getCode(Letter *, int, string*); 
 		void decode(Letter*,int*, int);
 
 
@@ -23,7 +23,7 @@ class Trie{
 	
 	//-----Methods-----//	
 		void getCode(int, string *);
-		void codeMap(string);    
+		void codeMap(string *);    
 		void printEncoded(int *, int);
 		void decode(int *, int);
 };
@@ -52,29 +52,31 @@ Trie::Trie(Letter *array, int count){  //Constructor
 	filled--;
 	i++;
 	}
-	this->root = deleteMin(array,count);
+	Letter h = deleteMin(array,count);
+	this->root = &h;
 }
 
-void Trie::codeMap(string c){
+void Trie::codeMap(string *c){
 	codeMap(root,c);
 }
-void Trie::codeMap(Letter *l,string c){
-	string left = c;
-	string right = c;
+void Trie::codeMap(Letter *l,string *c){
+	string *left = c;
+	string *right = c;
 	if((l->getAsc()==-2)){
-		left.append("1");
+		left->append("1");
 		codeMap(l->left,left);
-		right.append("0");
+		right->append("0");
 		codeMap(l->right,right);
 	}else{
-		l->path = c;
-		printf("%s : %c\n",c.c_str(), l->getAsc());
+		l->path.append(c->c_str());
+		printf("%s : %c\n",c->c_str(), l->getAsc());
 	}
 }
 
 void Trie::getCode(int l, string *s){
 	getCode(root,l,s);
 }
+
 void Trie::getCode(Letter *trie, int l, string *s){
 	if((trie->getAsc()==-2)){
 		getCode(trie->left,l,s);
@@ -110,7 +112,7 @@ void Trie::decode(Letter *trie, int *buffer, int length){
 	cout << "\n";
 }
 
-void printEncoded(int *buffer,int count){ //prints I Like Apples in encoded form
+void Trie::printEncoded(int *buffer,int count){ //prints I Like Apples in encoded form
 	string *code = new string();
 	for(int i=0;i < count;i++){
 		getCode(root,buffer[i], code);
